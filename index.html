@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        min-height: 100vh;
+        padding: 40px 20px;
+        color: #f8fafc;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: auto;
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 32px;
+        color: #ffffff;
+      }
+
+      .top-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: bold;
+        transition: 0.25s ease;
+      }
+
+      #add {
+        background: #22c55e;
+        color: white;
+      }
+
+      #add:hover {
+        background: #16a34a;
+        transform: translateY(-2px);
+      }
+
+      #savedata {
+        background: #3b82f6;
+        color: white;
+      }
+
+      #savedata:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      thead {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      thead th {
+        padding: 16px;
+        text-align: left;
+        font-size: 15px;
+        color: #e2e8f0;
+      }
+
+      tbody tr {
+        transition: 0.2s ease;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      tbody td {
+        padding: 14px 16px;
+        color: #f1f5f9;
+        vertical-align: middle;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .editbtn {
+        background: #f59e0b;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+      }
+
+      .editbtn:hover {
+        background: #d97706;
+      }
+
+      .deletebtn {
+        background: #ef4444;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+      }
+
+      .deletebtn:hover {
+        background: #dc2626;
+      }
+
+      #AddPopUP,
+      #ModifyPopUP {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .popup-box {
+        width: 100%;
+        max-width: 420px;
+        background: #ffffff;
+        color: #0f172a;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+        animation: popupShow 0.25s ease;
+      }
+
+      @keyframes popupShow {
+        from {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .popup-box h2 {
+        margin-bottom: 18px;
+        text-align: center;
+      }
+
+      .popup-box label {
+        display: block;
+        margin: 12px 0 6px;
+        font-weight: bold;
+      }
+
+      .popup-box input,
+      .popup-box textarea {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .popup-box input:focus,
+      .popup-box textarea:focus {
+        border-color: #3b82f6;
+      }
+
+      .popup-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 18px;
+      }
+
+      .save-btn {
+        background: #22c55e;
+        color: white;
+      }
+
+      .close-btn {
+        background: #94a3b8;
+        color: white;
+      }
+
+      .save-btn:hover {
+        background: #16a34a;
+      }
+
+      .close-btn:hover {
+        background: #64748b;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px;
+        }
+
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
+          width: 100%;
+        }
+
+        thead {
+          display: none;
+        }
+
+        tbody tr {
+          margin-bottom: 15px;
+          border-radius: 12px;
+          overflow: hidden;
+          background: rgba(255, 255, 255, 0.05);
+          padding: 10px;
+        }
+
+        tbody td {
+          display: flex;
+          justify-content: space-between;
+          gap: 15px;
+          padding: 10px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        tbody td::before {
+          font-weight: bold;
+          color: #cbd5e1;
+        }
+
+        tbody td:nth-child(1)::before {
+          content: "Title";
+        }
+
+        tbody td:nth-child(2)::before {
+          content: "Date";
+        }
+
+        tbody td:nth-child(3)::before {
+          content: "Description";
+        }
+
+        tbody td:nth-child(4)::before {
+          content: "Actions";
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Reservation Manager</h1>
+
+      <div class="top-buttons">
+        <button id="add">Add Reservation</button>
+        <button id="savedata">Save Reservations</button>
+      </div>
+
+      <table id="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div id="AddPopUP">
+      <div class="popup-box">
+        <h2>Add Reservation</h2>
+        <label for="title">Title</label>
+        <input type="text" id="title" />
+
+        <label for="date">Date</label>
+        <input type="date" id="date" />
+
+        <label for="desc">Description</label>
+        <textarea rows="4" id="desc"></textarea>
+
+        <div class="popup-actions">
+          <button class="close-btn" onclick="AddPopUP.style.display='none'">Close</button>
+          <button id="Savebtn" class="save-btn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="ModifyPopUP">
+      <div class="popup-box">
+        <h2>Modify Reservation</h2>
+        <input type="hidden" id="idhidden" value="" />
+
+        <label for="Mtitle">Title</label>
+        <input type="text" id="Mtitle" />
+
+        <label for="Mdate">Date</label>
+        <input type="date" id="Mdate" />
+
+        <label for="Mdesc">Description</label>
+        <textarea rows="4" id="Mdesc"></textarea>
+
+        <div class="popup-actions">
+          <button class="close-btn" onclick="ModifyPopUP.style.display='none'">Close</button>
+          <button id="Modifybtn" class="save-btn">Modify</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let data = JSON.parse(localStorage.getItem("dates")) || [];
+
+      const tbody = document.getElementById("tableBody");
+      const btnadd = document.getElementById("add");
+      const Apopup = document.getElementById("AddPopUP");
+      const Mpopup = document.getElementById("ModifyPopUP");
+      const savebtn = document.getElementById("Savebtn");
+      const modifybtn = document.getElementById("Modifybtn");
+      const savedatabtn = document.getElementById("savedata");
+
+      function addDatestoTable(dates) {
+        tbody.innerHTML = "";
+        let box = document.createDocumentFragment();
+
+        for (let date of dates) {
+          let tr = document.createElement("tr");
+
+          for (let k of ["title", "date", "desc"]) {
+            let td = document.createElement("td");
+            td.textContent =
+              k === "date"
+                ? new Date(date[k]).toLocaleDateString()
+                : date[k];
+            tr.appendChild(td);
+          }
+
+          let actionTd = document.createElement("td");
+          let actionDiv = document.createElement("div");
+          actionDiv.classList.add("actions");
+
+          let btnM = document.createElement("button");
+          btnM.setAttribute("data-id", date.id);
+          btnM.textContent = "Modify";
+          btnM.classList.add("editbtn");
+
+          let btnS = document.createElement("button");
+          btnS.setAttribute("data-id", date.id);
+          btnS.textContent = "Delete";
+          btnS.classList.add("deletebtn");
+
+          actionDiv.appendChild(btnM);
+          actionDiv.appendChild(btnS);
+          actionTd.appendChild(actionDiv);
+          tr.appendChild(actionTd);
+
+          box.appendChild(tr);
+        }
+
+        tbody.appendChild(box);
+      }
+
+      addDatestoTable(data);
+
+      tbody.addEventListener("click", (e) => {
+        if (e.target.classList.contains("editbtn")) {
+          let objet = data.find((a) => a.id == e.target.dataset.id);
+          document.getElementById("Mtitle").value = objet.title;
+          document.getElementById("Mdesc").value = objet.desc;
+          document.getElementById("Mdate").value = objet.date;
+          document.getElementById("idhidden").value = objet.id;
+          Mpopup.style.display = "flex";
+        }
+
+        if (e.target.classList.contains("deletebtn")) {
+          let index = data.findIndex((a) => a.id == e.target.dataset.id);
+          data.splice(index, 1);
+          addDatestoTable(data);
+        }
+      });
+
+      modifybtn.addEventListener("click", () => {
+        let title = document.getElementById("Mtitle").value;
+        let desc = document.getElementById("Mdesc").value;
+        let date = document.getElementById("Mdate").value;
+        let id = document.getElementById("idhidden").value;
+
+        let objet = data.find((u) => u.id == id);
+        objet.title = title;
+        objet.date = date;
+        objet.desc = desc;
+
+        document.getElementById("Mtitle").value = "";
+        document.getElementById("Mdesc").value = "";
+        document.getElementById("Mdate").value = "";
+        Mpopup.style.display = "none";
+        addDatestoTable(data);
+      });
+
+      savebtn.addEventListener("click", () => {
+        let title = document.getElementById("title").value;
+        let desc = document.getElementById("desc").value;
+        let date = document.getElementById("date").value;
+
+        data.push({
+          id: Date.now(),
+          title: title,
+          date: date,
+          desc: desc,
+        });
+
+        document.getElementById("title").value = "";
+        document.getElementById("desc").value = "";
+        document.getElementById("date").value = "";
+
+        addDatestoTable(data);
+        Apopup.style.display = "none";
+      });
+
+      btnadd.addEventListener("click", () => {
+        Apopup.style.display = "flex";
+      });
+
+      savedatabtn.addEventListener("click", () => {
+        localStorage.setItem("dates", JSON.stringify(data));
+        alert("Save Success");
+      });
+    </script>
+  </body>
+</html>
